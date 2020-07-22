@@ -1,0 +1,7 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+
+# App
+GET       /ping                  controllers.CatalogController.ping
+HEAD      /ping                  controllers.CatalogController.ping
+OPTIONS   /ping                  controllers.CatalogController.ping

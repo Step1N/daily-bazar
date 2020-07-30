@@ -1,10 +1,25 @@
 package controllers
 
-import play.api.mvc.{Action, Controller}
+import javax.inject.Inject
 
-object CatalogController extends Controller{
+import io.swagger.annotations.{ApiResponse, ApiResponses}
+import play.api.mvc.InjectedController
+import services.ItemService
+import play.api.libs.json._
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
+class CatalogController @Inject()(itemService: ItemService) extends InjectedController {
+
+
+  @ApiResponses(Array(new ApiResponse(code = 400, message = "Invalid Request")))
   def ping = Action { implicit request =>
     Ok("""{"msg": "pong from daily catalog "}""").as("application/json")
+  }
+
+  @ApiResponses(Array(new ApiResponse(code = 400, message = "Invalid Request")))
+  def items = Action { implicit request =>
+    val items = itemService.listAllItems(0, 10)
+    Ok(Json.prettyPrint(Json.obj("items" -> items)))
   }
 }

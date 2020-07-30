@@ -2,17 +2,18 @@ name := "daily-catalog"
 
 version := "0.1"
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.6"
 
 libraryDependencies ++= Seq(ws,
   filters,
-  "org.json4s" %% "json4s-jackson" % "3.3.0",
-  "org.json4s" %% "json4s-ext" % "3.3.0",
+  guice,
+  "org.json4s" %% "json4s-jackson" % "3.5.3",
+  "org.json4s" %% "json4s-ext" % "3.6.7",
   "commons-io" % "commons-io" % "2.5",
-  "com.typesafe.akka" % "akka-actor_2.11" % "2.3.16",
+  "com.typesafe.akka" %% "akka-actor" % "2.5.25",
   "com.github.wnameless" % "json-flattener" % "0.4.0",
   "com.amazonaws" % "aws-java-sdk-ssm" % "1.11.98",
-  "io.swagger" %% "swagger-scala-module" % "1.0.3"
+  "io.swagger" %% "swagger-play2" % "1.6.0"
 )
 
 

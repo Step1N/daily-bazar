@@ -4,4 +4,4 @@ resolvers ++= Seq("Typesafe repository" at "http://repo.typesafe.com/typesafe/re
   Classpaths.sbtPluginReleases)
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.9")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.7.2")

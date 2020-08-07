@@ -22,4 +22,10 @@ class CatalogController @Inject()(itemService: ItemService) extends InjectedCont
     val items = itemService.listAllItems(0, 10)
     Ok(Json.prettyPrint(Json.obj("items" -> items)))
   }
+
+  @ApiResponses(Array(new ApiResponse(code = 400, message = "Invalid Request")))
+  def item(itemName:String) = Action { implicit request =>
+    val item = itemService.fetchItemByName(itemName)
+    Ok(Json.prettyPrint(Json.obj("item" -> item)))
+  }
 }

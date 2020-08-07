@@ -2,13 +2,17 @@ package services
 
 import javax.inject.{Inject, Singleton}
 
-import dataops.FileDataOperation
+import dataops.ExcelDataOperation
 import models.Item
 
-class ItemService @Inject()(fileHelper: FileDataOperation) {
+class ItemService @Inject()(fileHelper: ExcelDataOperation) {
 
   def listAllItems(startIndex: Int, pageSize: Int):List[Item] = {
-    fileHelper.allItemList().toList
+    fileHelper.loadItemFromFile().toList
+  }
+
+  def fetchItemByName(itemName: String):Item = {
+    fileHelper.findItemByName(itemName)
   }
 
 }

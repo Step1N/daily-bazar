@@ -30,6 +30,10 @@ class FileDataOperation {
     Files.write(Paths.get(path), input, StandardOpenOption.APPEND)
   }
 
+  def findItemByName(item: String) = {
+    Item(1, "", "", "")
+  }
+
   def updateItemInFile(item: Item) = {
     val lineNumber = item.itemNumber;
     val newLine = (item.itemNumber.toString + "," + item.itemName + "," + item.itemQty + "," + item.itemDescription)

@@ -1,16 +1,18 @@
-package eventReciever
+package eventSender
 
 import java.util.Properties
+import javax.inject.Singleton
 
 import org.apache.kafka.clients.producer._
 
-object CatalogMsgProducer {
+@Singleton
+class CatalogMsgProducer {
 
-  def writeToKafka(topic: String, message:String): Unit = {
+  def informToOthers(topic: String, message: String): Unit = {
 
     val props = new Properties()
 
-    props.put("bootstrap.servers", "localhost:9094")
+    props.put("bootstrap.servers", "localhost:9092")
 
     props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
 
@@ -19,9 +21,7 @@ object CatalogMsgProducer {
     val producer = new KafkaProducer[String, String](props)
 
     val record = new ProducerRecord[String, String](topic, "catalog-change", message)
-
     producer.send(record)
-
     producer.close()
 
   }

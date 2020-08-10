@@ -1,16 +1,19 @@
-package eventSender
+package eventReciever
 
-import java.util
-import org.apache.kafka.clients.consumer.KafkaConsumer
-import java.util.Properties
 import java.time.Duration
+import java.util
+import java.util.Properties
+import javax.inject.Singleton
 
-object CatalogMsgConsumer {
+import org.apache.kafka.clients.consumer.KafkaConsumer
+
+@Singleton
+class CatalogMsgConsumer {
   def consumeFromKafka(topic: String) = {
 
     val props = new Properties()
 
-    props.put("bootstrap.servers", "localhost:9094")
+    props.put("bootstrap.servers", "localhost:9092")
 
     props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
 

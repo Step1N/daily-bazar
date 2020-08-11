@@ -5,37 +5,43 @@ import java.util
 import java.util.Properties
 import javax.inject.{Inject, Singleton}
 
+import akka.actor.Status.Success
+import akka.actor.{Actor, ActorSystem, Cancellable}
+import scala.concurrent.duration._
 import org.apache.kafka.clients.consumer.KafkaConsumer
+
 import services.OrderService
 
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
+
 @Singleton
-class OrderMsgConsumer @Inject()(orderService: OrderService){
+class OrderMsgConsumer @Inject()(orderService: OrderService, system: ActorSystem) {
 
-  def consumeFromKafka(topic: String) = {
-    println(" I am listening now")
-    val props = new Properties()
 
-    props.put("bootstrap.servers", "localhost:9092")
-
-    props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
-
-    props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
-
-    props.put("auto.offset.reset", "latest")
-
-    props.put("group.id", "order-consumer")
-
-    val consumer: KafkaConsumer[String, String] = new KafkaConsumer[String, String](props)
-
-    consumer.subscribe(util.Arrays.asList(topic))
-    val duration = Duration.ofSeconds(3000)
+  private def process(consumer: KafkaConsumer[String, String]): Future[Unit] = {
+    val duration = Duration.ofSeconds(1)
     consumer.poll(duration).records("test").forEach {
-      e => e.value match {
-        case "addedItemToCatalog" =>
-          orderService.placeOrder()
-        case _ =>
-          println("I dont care about this one", e.value)
-      }
+      e =>
+        e.value match {
+          case "addedItemToCatalog" =>
+            orderService.placeOrder()
+          case _ =>
+            println("I dont care about this one", e.value)
+        }
     }
+    Future {
+      Success
+    }
+
+  }
+
+  def schedule(consumer: KafkaConsumer[String, String]): Cancellable = {
+    system.scheduler.scheduleOnce(1.second)(
+      process(consumer).onComplete { _ =>
+        schedule(consumer)
+      }
+    )
   }
 }

@@ -33,7 +33,7 @@ class CatalogController @Inject()(itemService: ItemService) extends InjectedCont
   }
 
   @ApiResponses(Array(new ApiResponse(code = 500, message = "Invalid Payload"), new ApiResponse(code = 400, message = "Invalid Payload")))
-  def addItem() = Action(parse.json(maxLength = 20 * MB_TO_BYTES)) { implicit request =>
+  def addItem = Action(parse.json(maxLength = 20 * MB_TO_BYTES)) { implicit request =>
     request.body.validate[Item].fold(
       errors => BadRequest(errors.mkString),
       item => {
